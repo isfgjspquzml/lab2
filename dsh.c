@@ -37,7 +37,7 @@ void new_child(job_t *j, process_t *p, bool fg)
          /* Set the handling for job control signals back to the default. */
          signal(SIGTTOU, SIG_DFL);
 }
-static job_t ** joblist;
+job_t * joblist[25];
 /* Spawning a process with job control. fg is true if the 
  * newly-created process is to be placed in the foreground. 
  * (This implicitly puts the calling process in the background, 
@@ -85,14 +85,9 @@ void spawn_job(job_t *j, bool fg)
             set_child_pgid(j, p);
             if(j->pgid<0) j->pgid = getpid();
             if(!fg){
-                joblist[j->pgid]=j;          
-
+            }
             
             /* YOUR CODE HERE?  Parent-side code for new process.  */
-
-            if(!fg){ //do it in the background
-                
-            }
 
             else{
                 waitpid(pid,&status,0);
@@ -137,6 +132,9 @@ bool builtin_cmd(job_t *last_job, int argc, char **argv)
             for(i=0;i<20;i++){
                 if(joblist[i]!=NULL){
                     printf("%u: %s \n",i, joblist[i]->commandinfo);
+                    if(joblist[i]->first_process->completed){
+                        joblist[i]=NULL;
+                    }
                 }
             }   
             return true;
@@ -170,8 +168,7 @@ char* promptmsg(char* buf)
         return buf;
 }
 
-int main() 
-{
+int main(){
 
 	init_dsh();
 	DEBUG("Successfully initialized\n");
