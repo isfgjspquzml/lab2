@@ -58,6 +58,7 @@ void spawn_job(job_t *j, bool fg)
 	  /* YOUR CODE HERE? */
 	  /* Builtin commands are already taken care earlier */
 	  int status;
+        
 	  switch (pid = fork()) {
             
           case -1: /* fork failure */
@@ -68,11 +69,12 @@ void spawn_job(job_t *j, bool fg)
             p->pid = getpid();	    
             new_child(j, p, fg);
             
-	    /* YOUR CODE HERE?  Child-side code for new process. */
+            /* YOUR CODE HERE?  Child-side code for new process. */
             
-
-            execvp(p->argv[0],p->argv);
-            perror("New child should have done an exec");
+            if(execvp(p->argv[0],p->argv)<0){
+                perror("New child should have done an exec");
+            }
+              
             exit(EXIT_FAILURE);  /* NOT REACHED */
             break;    /* NOT REACHED */
 
