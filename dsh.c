@@ -1,7 +1,6 @@
 #include "dsh.h"
 
 // tcsetprgrp and setpgid are really important, once you fork, you need to change context
-// pipelines
 
 void seize_tty(pid_t callingprocess_pgid); /* Grab control of the terminal for the calling process pgid.  */
 void continue_job(job_t *j); /* resume a stopped job */
