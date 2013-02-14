@@ -1,5 +1,13 @@
 #include "dsh.h"
 
+/*
+ * Notes for myself
+ * $PATH, chdir (directory)
+ * job_is_stopped() and job_is_completed() (jobstatus)
+ * dsh.log, use O_CREAT
+ * gcc (c filename) -o devil
+ */
+
 void seize_tty(pid_t callingprocess_pgid); /* Grab control of the terminal for the calling process pgid.  */
 void continue_job(job_t *j); /* resume a stopped job */
 void spawn_job(job_t *j, bool fg); /* spawn a new job */
@@ -71,8 +79,16 @@ void spawn_job(job_t *j, bool fg)
             new_child(j, p, fg);
             
             /* YOUR CODE HERE?  Child-side code for new process. */
+<<<<<<< HEAD
             if (j->pgid<0) j->pgid=getpid();
             if (setpgid(0,j->pgid)==0 && fg) tcsetpgrp(STDIN_FILENO,j->pgid);
+=======
+
+            if (setpgid(0,j->pgid) == 0 && fg){ // If success and fg is set
+                  tcsetpgrp(STDIN_FILENO, j->pgid);
+            }
+              
+>>>>>>> c
             if(execvp(p->argv[0],p->argv)<0){
                 perror("New child should have done an exec");
             }
@@ -172,7 +188,16 @@ char* promptmsg(char* buf)
         return buf;
 }
 
+<<<<<<< HEAD
 int main(){
+=======
+void jobstatus() {
+    
+}
+
+int main() 
+{
+>>>>>>> c
 
 	init_dsh();
 	DEBUG("Successfully initialized\n");
@@ -196,6 +221,7 @@ int main(){
         /* You need to loop through jobs list since a command line can contain ;*/
         /* Check for built-in commands */
         /* If not built-in */
+        
             /* If job j runs in foreground */
             /* spawn_job(j,true) */
             /* else */
