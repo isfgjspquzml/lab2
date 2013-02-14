@@ -63,10 +63,11 @@ void spawn_job(job_t *j, bool fg)
 	process_t *p;
 
     int status;
+    int iterator; // To avoid having to use C99 mode, idk if necessary
 
     // I/O stuff
-    int input;
-    int output;
+    int fdinput;
+    int fdoutput;
         
     // Setting up pipes
     int i;
@@ -100,28 +101,51 @@ void spawn_job(job_t *j, bool fg)
                 if (setpgid(0,j->pgid)==0 && fg) tcsetpgrp(STDIN_FILENO,j->pgid);
                 
                 // input/output stuff
-                if(p->ifile!=NULL) doifilestuff(*input);
-                if(p->ofile!=NULL) doofilestuff(*input);
+                if(p->ifile!=NULL) {
+                    fdinput = open(p->ifile, O_WRONLY);
+                    if(fdinput < 0) {
+                        perror("Cannot open output file\n");
+                        exit(1);
+                    }
+                    if(fdinput!=0) dup2(fdinput, 0);
+                }
+                if(p->ofile!=NULL) {
+                    fdoutput = open(p->ifile, O_WRONLY | O_CREAT | O_EXCL,
+                                    S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+                    if(fdoutput < 0) {
+                        perror("Cannot open output file\n");
+                        exit(1);
+                    }
+                    if(fdinput!=0) dup2(fdoutput, 1);
+                }
+                
+                printf("PRINT \n");
+                printf("i: %i \n", i);
+                printf("k: %i \n", k);
                 
                 // pipes
                 // www.cs.loyola.edu/~jglenn/702/S2005/Examples/dup2.html
-                if(i!=0){
+                if(i>1){
                     if(k==1) {
+                        printf("first process in pipe");
                         dup2(pipefd[1], 1);
                     }
 
                     else if(k==i){
+                        printf("last process in pipe");
                         dup2(pipefd[2*k-1], 0);
                     }
                     
                     else{
+                        printf("process in pipe");
                         dup2(pipefd[2*k-2], 0);
                         dup2(pipefd[2*k+1], 1);
                     }
                     
-                    for(int l=0; l<i; l++) {
-                        close(pipefd[l]);
+                    for(iterator=0; iterator<i; iterator++) {
+                        close(pipefd[iterator]);
                     }
+                    printf("end");
                 }
                 
                 if(execvp(p->argv[0],p->argv)<0){
@@ -140,7 +164,7 @@ void spawn_job(job_t *j, bool fg)
                
                 /* YOUR CODE HERE?  Parent-side code for new process.  */
                 
-                for(int l=0; l<i; l++) {
+                for(iterator=0; iterator<i; iterator++) {
                     waitpid(pid,&status,0);
                     printf("child %d exited with status %d\n",pid,WEXITSTATUS(status));
                 }
@@ -216,16 +240,8 @@ char* promptmsg(char* buf)
     return buf;
 }
 
-void doifilestuff(int* input) {
-    printf("read \n");
-}
-
-void doofilestuff(int* output) {
-    printf("write \n");
-}
-
 int main(){
-        
+    
 	init_dsh();
 	DEBUG("Successfully initialized\n");
     char buf[150];
