@@ -1,7 +1,5 @@
 #include "dsh.h"
 
-// tcsetprgrp and setpgid are really important, once you fork, you need to change context
-
 void seize_tty(pid_t callingprocess_pgid); /* Grab control of the terminal for the calling process pgid.  */
 void continue_job(job_t *j); /* resume a stopped job */
 void spawn_job(job_t *j, bool fg); /* spawn a new job */
@@ -26,7 +24,7 @@ void new_child(job_t *j, process_t *p, bool fg)
           * the dsh and in the individual child processes because of
           * potential race conditions.  
           * */
-    
+
          p->pid = getpid();
 
          /* also establish child process group in child to avoid race (if parent has not done it yet). */
@@ -59,9 +57,9 @@ void spawn_job(job_t *j, bool fg)
 
 	  /* YOUR CODE HERE? */
 	  /* Builtin commands are already taken care earlier */
-	  
+	  int status;
 	  switch (pid = fork()) {
-
+            
           case -1: /* fork failure */
             perror("fork");
             exit(EXIT_FAILURE);
@@ -71,6 +69,9 @@ void spawn_job(job_t *j, bool fg)
             new_child(j, p, fg);
             
 	    /* YOUR CODE HERE?  Child-side code for new process. */
+            
+
+            execvp(p->argv[0],p->argv);
             perror("New child should have done an exec");
             exit(EXIT_FAILURE);  /* NOT REACHED */
             break;    /* NOT REACHED */
@@ -79,8 +80,16 @@ void spawn_job(job_t *j, bool fg)
             /* establish child process group */
             p->pid = pid;
             set_child_pgid(j, p);
+            if(!fg){
+                
+            }
 
+            else{
+                waitpid(pid,&status,0);
+                printf("child %d exited with status %d\n",pid,WEXITSTATUS(status));
+            }
             /* YOUR CODE HERE?  Parent-side code for new process.  */
+            
           }
 
             /* YOUR CODE HERE?  Parent-side code for new job.*/
@@ -117,6 +126,8 @@ bool builtin_cmd(job_t *last_job, int argc, char **argv)
         }
 	else if (!strcmp("cd", argv[0])) {
             /* Your code here */
+
+            chdir(argv[1]);
         }
         else if (!strcmp("bg", argv[0])) {
             /* Your code here */
@@ -124,14 +135,22 @@ bool builtin_cmd(job_t *last_job, int argc, char **argv)
         else if (!strcmp("fg", argv[0])) {
             /* Your code here */
         }
+
         return false;       /* not a builtin command */
 }
 
 /* Build prompt messaage */
-char* promptmsg() 
+char* promptmsg(char* buf) 
 {
+        char* dir = NULL;
+        dir=getcwd(dir,0);
+    
+        int pid = getpid();
+
     /* Modify this to include pid */
-	return "dsh$ ";
+	
+        sprintf(buf, "dsh-%i:%s$ ", pid, dir);
+        return buf;
 }
 
 int main() 
@@ -139,10 +158,10 @@ int main()
 
 	init_dsh();
 	DEBUG("Successfully initialized\n");
-
+        char buf[150];
 	while(1) {
         job_t *j = NULL;
-		if(!(j = readcmdline(promptmsg()))) {
+		if(!(j = readcmdline(promptmsg(buf)))) {
 			if (feof(stdin)) { /* End of file (ctrl-d) */
 				fflush(stdout);
 				printf("\n");
@@ -150,10 +169,10 @@ int main()
            		}
 			continue; /* NOOP; user entered return or spaces with return */
 		}
-
-        /*   Only for debugging purposes to show parser output; turn off in the
+        
+        /* Only for debugging purposes to show parser output; turn off in the
          * final code */
-        if(PRINT_INFO) print_job(j);
+       /* if(PRINT_INFO) print_job(j);*/
 
         /* Your code goes here */
         /* You need to loop through jobs list since a command line can contain ;*/
@@ -163,5 +182,18 @@ int main()
             /* spawn_job(j,true) */
             /* else */
             /* spawn_job(j,false) */
+        
+        while(j!=NULL){
+            if(!builtin_cmd(j,j->first_process->argc,j->first_process->argv)){
+                if(!j->bg){ 
+                    spawn_job(j,true);
+                }
+                else{ 
+                    spawn_job(j,false);
+                }
+            }
+            j=j->next;
+        }
     }
 }
+
