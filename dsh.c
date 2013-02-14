@@ -37,7 +37,7 @@ void new_child(job_t *j, process_t *p, bool fg)
          /* Set the handling for job control signals back to the default. */
          signal(SIGTTOU, SIG_DFL);
 }
-static job_t * joblist[20];
+static job_t ** joblist;
 /* Spawning a process with job control. fg is true if the 
  * newly-created process is to be placed in the foreground. 
  * (This implicitly puts the calling process in the background, 
@@ -59,6 +59,7 @@ void spawn_job(job_t *j, bool fg)
 	  /* YOUR CODE HERE? */
 	  /* Builtin commands are already taken care earlier */
 	  int status;
+        
 	  switch (pid = fork()) {
             
           case -1: /* fork failure */
@@ -69,11 +70,12 @@ void spawn_job(job_t *j, bool fg)
             p->pid = getpid();	    
             new_child(j, p, fg);
             
-	    /* YOUR CODE HERE?  Child-side code for new process. */
+            /* YOUR CODE HERE?  Child-side code for new process. */
             
-
-            execvp(p->argv[0],p->argv);
-            perror("New child should have done an exec");
+            if(execvp(p->argv[0],p->argv)<0){
+                perror("New child should have done an exec");
+            }
+              
             exit(EXIT_FAILURE);  /* NOT REACHED */
             break;    /* NOT REACHED */
 
@@ -123,6 +125,12 @@ bool builtin_cmd(job_t *last_job, int argc, char **argv)
 	}
         else if (!strcmp("jobs", argv[0])) {
             /* Your code here */
+            int i;
+            for(i=0;i<20;i++){
+                if(joblist[i]!=NULL){
+                    printf("%u: %s \n",i, joblist[i]->commandinfo);
+                }
+            }   
             return true;
         }
 	else if (!strcmp("cd", argv[0])) {
@@ -186,8 +194,14 @@ int main()
         
         while(j!=NULL){
             if(!builtin_cmd(j,j->first_process->argc,j->first_process->argv)){
+                
+                int i=0;
+                while(joblist[i]!=NULL){
+                    i++;
+                }
+                joblist[i]=j;
+
                 if(!j->bg){ 
-                    
                     spawn_job(j,true);
                 }
                 else{ 
