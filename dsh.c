@@ -83,6 +83,7 @@ void spawn_job(job_t *j, bool fg)
             /* establish child process group */
             p->pid = pid;
             set_child_pgid(j, p);
+            if(j->pgid<0) j->pgid = getpid();
             if(!fg){
                 joblist[j->pgid]=j;          
             }
