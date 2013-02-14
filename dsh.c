@@ -45,7 +45,9 @@ void new_child(job_t *j, process_t *p, bool fg)
     /* Set the handling for job control signals back to the default. */
     signal(SIGTTOU, SIG_DFL);
 }
+
 job_t * joblist[25];
+
 /* Spawning a process with job control. fg is true if the
  * newly-created process is to be placed in the foreground.
  * (This implicitly puts the calling process in the background,
@@ -119,12 +121,9 @@ void spawn_job(job_t *j, bool fg)
                     else if(fdinput!=0 && k==i) dup2(fdoutput, 1);
                 }
                 
-                printf("PRINT \n");
-                printf("i: %i \n", i);
-                printf("k: %i \n", k);
-                
                 // pipes
                 // www.cs.loyola.edu/~jglenn/702/S2005/Examples/dup2.html
+                
                 if(i>1){
                     if(k==1) {
                         printf("first process in pipe");
@@ -195,6 +194,7 @@ bool builtin_cmd(job_t *last_job, int argc, char **argv)
     
     if (!strcmp(argv[0], "quit")) {
         /* Your code here */
+        // Already done
         exit(EXIT_SUCCESS);
 	}
     else if (!strcmp("jobs", argv[0])) {
@@ -212,7 +212,6 @@ bool builtin_cmd(job_t *last_job, int argc, char **argv)
     }
 	else if (!strcmp("cd", argv[0])) {
         /* Your code here */
-        
         chdir(argv[1]);
     }
     else if (!strcmp("bg", argv[0])) {
@@ -221,6 +220,15 @@ bool builtin_cmd(job_t *last_job, int argc, char **argv)
     }
     else if (!strcmp("fg", argv[0])) {
         /* Your code here */
+        int fd;
+        fd = open(argv[0], O_WRONLY);
+        if(fd < 0) {
+            perror("Cannot open output file\n");
+            exit(1);
+        }
+        else{
+            tcsetpgrp(fd, last_job->pgid);
+        }
     }
     
     return false;       /* not a builtin command */
