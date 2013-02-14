@@ -83,20 +83,29 @@ void spawn_job(job_t *j, bool fg)
             /* establish child process group */
             p->pid = pid;
             set_child_pgid(j, p);
+<<<<<<< HEAD
             if(j->pgid<0) j->pgid = getpid();
             if(!fg){
                 joblist[j->pgid]=j;          
+=======
+            
+            /* YOUR CODE HERE?  Parent-side code for new process.  */
+
+            if(!fg){ //do it in the background
+                
+>>>>>>> d9af60783501595bf13e8da728c05bffaadd5dc2
             }
 
             else{
                 waitpid(pid,&status,0);
                 printf("child %d exited with status %d\n",pid,WEXITSTATUS(status));
             }
-            /* YOUR CODE HERE?  Parent-side code for new process.  */
-            
           }
 
             /* YOUR CODE HERE?  Parent-side code for new job.*/
+        
+        
+        
 	    seize_tty(getpid()); // assign the terminal back to dsh
 
 	}
