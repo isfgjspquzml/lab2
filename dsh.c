@@ -71,7 +71,8 @@ void spawn_job(job_t *j, bool fg)
             new_child(j, p, fg);
             
             /* YOUR CODE HERE?  Child-side code for new process. */
-            
+            if (j->pgid<0) j->pgid=getpid();
+            if (setpgid(0,j->pgid)==0 && fg) tcsetpgrp(STDIN_FILENO,j->pgid);
             if(execvp(p->argv[0],p->argv)<0){
                 perror("New child should have done an exec");
             }
@@ -83,7 +84,8 @@ void spawn_job(job_t *j, bool fg)
             /* establish child process group */
             p->pid = pid;
             set_child_pgid(j, p);
-            if(j->pgid<0) j->pgid = getpid();
+            if(j->pgid<0) j->pgid = pid;
+            setpgid(pid, j->pgid);
             if(!fg){
             }
             
@@ -91,6 +93,7 @@ void spawn_job(job_t *j, bool fg)
 
             else{
                 waitpid(pid,&status,0);
+
                 printf("child %d exited with status %d\n",pid,WEXITSTATUS(status));
             }
           }
@@ -146,6 +149,7 @@ bool builtin_cmd(job_t *last_job, int argc, char **argv)
         }
         else if (!strcmp("bg", argv[0])) {
             /* Your code here */
+            continue_job(atoi(argv[1]));
         }
         else if (!strcmp("fg", argv[0])) {
             /* Your code here */
