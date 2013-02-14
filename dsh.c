@@ -61,19 +61,18 @@ void spawn_job(job_t *j, bool fg)
     
 	pid_t pid;
 	process_t *p;
+
+    int status;
+
+    // I/O stuff
+    int input;
+    int output;
+        
+    // Setting up pipes
     int i;
     int k;
-    int l;
-    
-    int status;
-    
-    // Setting up pipes
     i=0;
-    
-    for(p = j->first_process; p; p = p->next) {
-        i++;
-    }
-    
+    for(p = j->first_process; p; p = p->next) i++;
     k = 0;
     int pipefd[2*(i-1)];
     pipe(pipefd);
@@ -100,8 +99,13 @@ void spawn_job(job_t *j, bool fg)
                 if (j->pgid<0) j->pgid=getpid();
                 if (setpgid(0,j->pgid)==0 && fg) tcsetpgrp(STDIN_FILENO,j->pgid);
                 
-                if(i!=0){ // Pipes
+                // input/output stuff
+                if(p->ifile!=NULL) doifilestuff(*input);
+                if(p->ofile!=NULL) doofilestuff(*input);
                 
+                // pipes
+                // www.cs.loyola.edu/~jglenn/702/S2005/Examples/dup2.html
+                if(i!=0){
                     if(k==1) {
                         dup2(pipefd[1], 1);
                     }
@@ -115,7 +119,7 @@ void spawn_job(job_t *j, bool fg)
                         dup2(pipefd[2*k+1], 1);
                     }
                     
-                    for(l=0; l<i; l++) {
+                    for(int l=0; l<i; l++) {
                         close(pipefd[l]);
                     }
                 }
@@ -136,7 +140,7 @@ void spawn_job(job_t *j, bool fg)
                
                 /* YOUR CODE HERE?  Parent-side code for new process.  */
                 
-                for(l=0; l<i; l++) {
+                for(int l=0; l<i; l++) {
                     waitpid(pid,&status,0);
                     printf("child %d exited with status %d\n",pid,WEXITSTATUS(status));
                 }
@@ -212,11 +216,11 @@ char* promptmsg(char* buf)
     return buf;
 }
 
-void ifilestuff() {
+void doifilestuff(int* input) {
     printf("read \n");
 }
 
-void ofilestuff() {
+void doofilestuff(int* output) {
     printf("write \n");
 }
 
