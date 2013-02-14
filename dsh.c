@@ -45,7 +45,9 @@ void new_child(job_t *j, process_t *p, bool fg)
          /* Set the handling for job control signals back to the default. */
          signal(SIGTTOU, SIG_DFL);
 }
+
 job_t * joblist[25];
+
 /* Spawning a process with job control. fg is true if the 
  * newly-created process is to be placed in the foreground. 
  * (This implicitly puts the calling process in the background, 
@@ -79,16 +81,14 @@ void spawn_job(job_t *j, bool fg)
             new_child(j, p, fg);
             
             /* YOUR CODE HERE?  Child-side code for new process. */
-<<<<<<< HEAD
+
             if (j->pgid<0) j->pgid=getpid();
             if (setpgid(0,j->pgid)==0 && fg) tcsetpgrp(STDIN_FILENO,j->pgid);
-=======
 
             if (setpgid(0,j->pgid) == 0 && fg){ // If success and fg is set
                   tcsetpgrp(STDIN_FILENO, j->pgid);
             }
               
->>>>>>> c
             if(execvp(p->argv[0],p->argv)<0){
                 perror("New child should have done an exec");
             }
@@ -188,9 +188,7 @@ char* promptmsg(char* buf)
         return buf;
 }
 
-<<<<<<< HEAD
 int main(){
-=======
 void jobstatus() {
     
 }
