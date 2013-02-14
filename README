@@ -6,24 +6,24 @@
  * Team Info & Time spent
  *************************/
 
-	Name1: Full Name 	// Edit this accordingly
-	NetId1: fn	 	// Edit
-	Time spent: 10 hours 	// Edit 
+	Name1: Tianyu Shi
+	NetId1: ts133
+	Time spent: 
 
-	Name2: Full Name 	// Edit this accordingly
-	NetId2: fn	 	// Edit
-	Time spent: 10 hours 	// Edit 
+	Name2: ALex Pien	
+	NetId2: ap183	 	
+	Time spent: 
 
-	Name3: Full Name 	// Edit this accordingly
-	NetId3: fn	 	// Edit
-	Time spent: 10 hours 	// Edit 
+	Name3: Vincent Wang
+	NetId3: 
+	Time spent: 
 
 /******************
  * Files to submit
  ******************/
 
-	dsh.c 	// Header file is not necessary; other *.c files if necessary
-	README	// This file filled with the lab implementation details
+	dsh.c 
+	README
 
 /************************
  * Implementation details
@@ -59,6 +59,5 @@
  * References
  ************************/
 
-/*
- * List of collaborators involved including any online references/citations.
- * */
+Pipelining reference
+http://www.cs.loyola.edu/~jglenn/702/S2005/Examples/dup2.html

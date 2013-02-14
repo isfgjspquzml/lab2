@@ -61,12 +61,30 @@ void spawn_job(job_t *j, bool fg)
     
 	pid_t pid;
 	process_t *p;
+    int i;
+    int k;
+    int l;
     
+    int status;
+    
+    // Setting up pipes
+    i=0;
+    
+    for(p = j->first_process; p; p = p->next) {
+        i++;
+    }
+    
+    k = 0;
+    int pipefd[2*(i-1)];
+    pipe(pipefd);
+    
+    // Iterate through each process
 	for(p = j->first_process; p; p = p->next) {
+        
+        k++;
         
         /* YOUR CODE HERE? */
         /* Builtin commands are already taken care earlier */
-        int status;
         
         switch (pid = fork()) {
                 
@@ -81,6 +99,27 @@ void spawn_job(job_t *j, bool fg)
                 /* YOUR CODE HERE?  Child-side code for new process. */
                 if (j->pgid<0) j->pgid=getpid();
                 if (setpgid(0,j->pgid)==0 && fg) tcsetpgrp(STDIN_FILENO,j->pgid);
+                
+                if(i!=0){ // Pipes
+                
+                    if(k==1) {
+                        dup2(pipefd[1], 1);
+                    }
+
+                    else if(k==i){
+                        dup2(pipefd[2*k-1], 0);
+                    }
+                    
+                    else{
+                        dup2(pipefd[2*k-2], 0);
+                        dup2(pipefd[2*k+1], 1);
+                    }
+                    
+                    for(l=0; l<i; l++) {
+                        close(pipefd[l]);
+                    }
+                }
+                
                 if(execvp(p->argv[0],p->argv)<0){
                     perror("New child should have done an exec");
                 }
@@ -94,25 +133,18 @@ void spawn_job(job_t *j, bool fg)
                 set_child_pgid(j, p);
                 if(j->pgid<0) j->pgid = pid;
                 setpgid(pid, j->pgid);
-                if(!fg){
-                }
-                
+               
                 /* YOUR CODE HERE?  Parent-side code for new process.  */
                 
-                else{
+                for(l=0; l<i; l++) {
                     waitpid(pid,&status,0);
-                    
                     printf("child %d exited with status %d\n",pid,WEXITSTATUS(status));
                 }
         }
         
         /* YOUR CODE HERE?  Parent-side code for new job.*/
-        
-        
-        
 	    seize_tty(getpid()); // assign the terminal back to dsh
-        
-	}
+    }
 }
 
 /* Sends SIGCONT signal to wake up the blocked job */
@@ -180,8 +212,16 @@ char* promptmsg(char* buf)
     return buf;
 }
 
+void ifilestuff() {
+    printf("read \n");
+}
+
+void ofilestuff() {
+    printf("write \n");
+}
+
 int main(){
-    
+        
 	init_dsh();
 	DEBUG("Successfully initialized\n");
     char buf[150];
@@ -211,7 +251,7 @@ int main(){
         
         while(j!=NULL){
             if(!builtin_cmd(j,j->first_process->argc,j->first_process->argv)){
-                
+                                
                 int i=0;
                 while(joblist[i]!=NULL){
                     i++;
