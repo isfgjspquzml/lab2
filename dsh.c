@@ -107,7 +107,7 @@ void spawn_job(job_t *j, bool fg)
                         perror("Cannot open output file\n");
                         exit(1);
                     }
-                    if(fdinput!=0) dup2(fdinput, 0);
+                    else if(fdinput!=0 && k==1) dup2(fdinput, 0);
                 }
                 if(p->ofile!=NULL) {
                     fdoutput = open(p->ifile, O_WRONLY | O_CREAT | O_EXCL,
@@ -116,7 +116,7 @@ void spawn_job(job_t *j, bool fg)
                         perror("Cannot open output file\n");
                         exit(1);
                     }
-                    if(fdinput!=0) dup2(fdoutput, 1);
+                    else if(fdinput!=0 && k==i) dup2(fdoutput, 1);
                 }
                 
                 printf("PRINT \n");
