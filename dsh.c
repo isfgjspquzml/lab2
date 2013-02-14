@@ -151,7 +151,7 @@ int main()
 			continue; /* NOOP; user entered return or spaces with return */
 		}
 
-        /* Only for debugging purposes to show parser output; turn off in the
+        /*   Only for debugging purposes to show parser output; turn off in the
          * final code */
         if(PRINT_INFO) print_job(j);
 
