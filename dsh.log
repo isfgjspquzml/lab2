@@ -2,3 +2,21 @@
 9153(Launched): pwd
 9152(Completed): ls
 9153(Completed): pwd
+New child should have done an exec: No such file or directory
+New child should have done an exec: No such file or directory
+New child should have done an exec: No such file or directory
+New child should have done an exec: No such file or directory
+dsh.c: In function ‘builtin_cmd’:
+dsh.c:255:9: warning: passing argument 1 of ‘continue_job’ makes pointer from integer without a cast [enabled by default]
+dsh.c:182:6: note: expected ‘struct job_t *’ but argument is of type ‘int’
+dsh.c: In function ‘spawn_job’:
+dsh.c:173:11: warning: ‘fdinput’ may be used uninitialized in this function [-Wuninitialized]
+dsh.c:174:11: warning: ‘fdoutput’ may be used uninitialized in this function [-Wuninitialized]
+dsh.c: In function ‘check_status’:
+dsh.c:199:14: warning: the address of ‘job_is_stopped’ will always evaluate as ‘true’ [-Waddress]
+dsh.c: In function ‘builtin_cmd’:
+dsh.c:256:9: warning: passing argument 1 of ‘continue_job’ makes pointer from integer without a cast [enabled by default]
+dsh.c:182:6: note: expected ‘struct job_t *’ but argument is of type ‘int’
+dsh.c: In function ‘spawn_job’:
+dsh.c:173:11: warning: ‘fdinput’ may be used uninitialized in this function [-Wuninitialized]
+dsh.c:174:11: warning: ‘fdoutput’ may be used uninitialized in this function [-Wuninitialized]
