@@ -125,3 +125,21 @@ waitpid: No child processes
 waitpid: No child processes
 waitpid: No child processes
 waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+tcsetpgrp failure: No such process
+tcsetpgrp failure: No such process
+tcsetpgrp failure: No such process
+tcsetpgrp failure: No such process
