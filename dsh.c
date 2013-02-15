@@ -369,21 +369,21 @@ int main(){
 	DEBUG("Successfully initialized\n");
         char buf[150];
 	while(1) {
-        job_t *j = NULL;
+                job_t *j = NULL;
 		if(!(j = readcmdline(promptmsg(buf)))) {
 			if (feof(stdin)) { /* End of file (ctrl-d) */
 				fflush(stdout);
                 close_log(); 
 				printf("\n");
 				exit(EXIT_SUCCESS);
-            }
+                        }
 			continue; /* NOOP; user entered return or spaces with return */
 		}
-        if(endswith(j->first_process->argv[0],".c")){
-            j->first_process->argv[1]=j->first_process->argv[0];
-            j->first_process->argv[0]="gcc";
+                if(endswith(j->first_process->argv[0],".c")){
+                    j->first_process->argv[1]=j->first_process->argv[0];
+                    j->first_process->argv[0]="gcc";
           
-        }
+                 }
         /* Only for debugging purposes to show parser output; turn off in the
          * final code */
         if(PRINT_INFO) print_job(j);
@@ -397,7 +397,8 @@ int main(){
         /* else */
         /* spawn_job(j,false) */
         while(j!=NULL){
-            if(!builtin_cmd(j,j->first_process->argc,j->first_process->argv)){
+            printf("YOOO\n");
+            if(!builtin_cmd(j,j->first_process->argc,j->first_process->argv)&&!job_is_completed(j)){
                 if(!joblist){
                     joblist=j;
                 }
@@ -409,13 +410,15 @@ int main(){
                     cur->next=j;
                }
                if(!j->bg){
+                    printf("SPWANEDDD\n");
                     spawn_job(j,true);
                 }
                 else{
                     spawn_job(j,false);
                 }
             }
-            j=j->next;
+            printf("helloooo\n");
+          j=j->next;
         }
     }
 }
