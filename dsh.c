@@ -175,11 +175,9 @@ void spawn_job(job_t *j, bool fg)
         }    
         int status;
         if (fg) {
-            printf("hi3\n");
             int it;
             int pid;
             for(it=0;it<i;it++){
-                printf("hiadfadsfa\n");
                 bool asdf;
                 int q; 
                 process_t *y;
@@ -197,7 +195,6 @@ void spawn_job(job_t *j, bool fg)
                         break;
 
                     default:
-                        printf("hi4\n");
                         asdf= false;
                         q= 0;
                         for(y = j->first_process; y; y = y->next) {
@@ -218,14 +215,13 @@ void spawn_job(job_t *j, bool fg)
                         else{
                             p->completed = true;
                         }
-                        printf("hi5\n");
                         break;
                     
                 }
             }    
         }
         else {
-            printf("hi6\n");
+        
             printf("Child in background\n");
             printf("PID: %d\n", pid);
         }
@@ -395,7 +391,7 @@ int main(){
                  }
         /* Only for debugging purposes to show parser output; turn off in the
          * final code */
-        if(PRINT_INFO) print_job(j);
+        /*if(PRINT_INFO) print_job(j);*/
         
         /* Your code goes here */
         /* You need to loop through jobs list since a command line can contain ;*/
@@ -410,34 +406,19 @@ int main(){
             joblist->next=NULL;
         }
         else{
-            printf("SUP SONN\n");
             job_t* cur;
 
             for(cur = joblist;cur->next!=NULL;cur=cur->next){
-                printf("hihihihi\n"); 
+               
             }
             cur->next=j;
         } 
         job_t* iter; 
         for(iter=j;iter!=NULL;iter=iter->next){
-            printf("%s\n",j->commandinfo);
+          
             if(!builtin_cmd(iter,iter->first_process->argc,iter->first_process->argv)){
-                printf("HELLO\n");
-              /*  if(joblist==NULL){
-                    joblist=iter;
-                    joblist->next=NULL;
-                }
-                else{
-                    printf("SUP SONN\n");
-                    job_t* cur;
-                    for(cur = joblist;cur!=NULL;cur=cur->next){
-                            printf("hihihihi\n"); 
-                       }
-                    printf("%s\n",cur->commandinfo);
-                    cur->next=iter;
-               } */
+
                if(!j->bg){
-                    printf("hi\n");
                     spawn_job(iter,true);
                 }
                 else{

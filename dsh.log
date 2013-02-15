@@ -146,3 +146,17 @@ tcsetpgrp failure: No such process
 tcsetpgrp failure: No such process
 tcsetpgrp failure: No such process
 tcsetpgrp failure: No such process
+dsh.c: In function ‘spawn_job’:
+dsh.c:76:9: warning: unused variable ‘status’ [-Wunused-variable]
+dsh.c: In function ‘builtin_cmd’:
+dsh.c:321:9: warning: passing argument 1 of ‘continue_job’ makes pointer from integer without a cast [enabled by default]
+dsh.c:65:6: note: expected ‘struct job_t *’ but argument is of type ‘int’
+dsh.c: In function ‘spawn_job’:
+dsh.c:76:9: warning: unused variable ‘status’ [-Wunused-variable]
+dsh.c: In function ‘builtin_cmd’:
+dsh.c:321:9: warning: passing argument 1 of ‘continue_job’ makes pointer from integer without a cast [enabled by default]
+dsh.c:65:6: note: expected ‘struct job_t *’ but argument is of type ‘int’
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
