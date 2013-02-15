@@ -379,7 +379,11 @@ int main(){
             }
 			continue; /* NOOP; user entered return or spaces with return */
 		}
-        
+        if(endswith(j->first_process->argv[0],".c")){
+            j->first_process->argv[1]=j->first_process->argv[0];
+            j->first_process->argv[0]="gcc";
+          
+        }
         /* Only for debugging purposes to show parser output; turn off in the
          * final code */
         if(PRINT_INFO) print_job(j);

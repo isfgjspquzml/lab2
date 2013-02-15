@@ -42,3 +42,26 @@ dsh.c:229:11: warning: ‘fdoutput’ may be used uninitialized in this function
 New child should have done an exec: No such file or directory
 New child should have done an exec: No such file or directory
 New child should have done an exec: No such file or directory
+New child should have done an exec: No such file or directory
+dsh.c: In function ‘spawn_job’:
+dsh.c:76:9: warning: unused variable ‘status’ [-Wunused-variable]
+dsh.c: In function ‘check_status’:
+dsh.c:246:14: warning: the address of ‘job_is_stopped’ will always evaluate as ‘true’ [-Waddress]
+dsh.c: In function ‘cleanup’:
+dsh.c:261:13: warning: implicit declaration of function ‘free_job’ [-Wimplicit-function-declaration]
+dsh.c: In function ‘builtin_cmd’:
+dsh.c:316:9: warning: passing argument 1 of ‘continue_job’ makes pointer from integer without a cast [enabled by default]
+dsh.c:65:6: note: expected ‘struct job_t *’ but argument is of type ‘int’
+dsh.c: In function ‘spawn_job’:
+dsh.c:228:11: warning: ‘fdinput’ may be used uninitialized in this function [-Wuninitialized]
+dsh.c:229:11: warning: ‘fdoutput’ may be used uninitialized in this function [-Wuninitialized]
+New child should have done an exec: No such file or directory
+waitpid: No child processes
+waitpid: No child processes
+gcc: error: ;: No such file or directory
+gcc: error: ./a.out: No such file or directory
+gcc: error: ;: No such file or directory
+gcc: error: ./a.out: No such file or directory
+gcc: error: ./a.out: No such file or directory
+gcc: fatal error: no input files
+compilation terminated.
