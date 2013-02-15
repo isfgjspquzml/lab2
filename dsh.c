@@ -70,6 +70,8 @@ void continue_job(job_t *j)
 void spawn_job(job_t *j, bool fg)
 {
     
+    printf("Spawn job\n");
+    
 	pid_t pid;
 	process_t *p;
 
@@ -87,16 +89,18 @@ void spawn_job(job_t *j, bool fg)
     for(p = j->first_process; p; p = p->next) i++;
     k = 0;
     int pipefd[2*(i-1)];
-    pipe(pipefd);
+    for(iterator=0; iterator<i-1; iterator++) pipe(pipefd+2*iterator);
+    
+    printf("for loop\n");
     
     // Iterate through each process
 	for(p = j->first_process; p; p = p->next) {
-        
         k++;
         
         /* YOUR CODE HERE? */
         /* Builtin commands are already taken care earlier */
         
+        printf("Switch Statement\n");
         switch (pid = fork()) {
                 
             case -1: /* fork failure */
@@ -104,6 +108,7 @@ void spawn_job(job_t *j, bool fg)
                 exit(EXIT_FAILURE);
                 
             case 0: /* child process  */
+                printf("Child Process");
                 p->pid = getpid();
                 new_child(j, p, fg);
                 
@@ -172,65 +177,69 @@ void spawn_job(job_t *j, bool fg)
                
                 /* YOUR CODE HERE?  Parent-side code for new process.  */
                 
-                   int status;
-    if (fg) {
+                int status;
+                if (fg) {
 
-        int it;
-        for(it=0;it<i;it++) {
+                int it;
+                for(it=0;it<i;it++) {
 
-            bool asdf;
-            int i;
-            process_t *y;
-            int pid;
-            switch (pid = waitpid(WAIT_ANY,&status,WUNTRACED)) {
+                bool asdf;
+                int i;
+                process_t *y;
+                int pid;
+                switch (pid = waitpid(WAIT_ANY,&status,WUNTRACED)) {
 
-                case -1:
-                    perror("waitpid");
-                    p->status = status;
-                    exit(EXIT_FAILURE);
+                    case -1:
+                        perror("waitpid");
+                        p->status = status;
+                        exit(EXIT_FAILURE);
 
-                case 0: // Should not occur
-                    printf("Process still running\n");
-                    p->status= status;
-                    break;
+                    case 0: // Should not occur
+                        printf("Process still running\n");
+                        p->status= status;
+                        break;
 
-                default:
-                    asdf= false;
-                    i = 0;
-                    for(y = j->first_process; y; y = y->next) {
-                        ++i;
-                        p = y;
-                        if((y->pid)==pid) break;
-                        if (it ==i ) {
-                            asdf = true;
+                    default:
+                        asdf= false;
+                        i = 0;
+                        for(y = j->first_process; y; y = y->next) {
+                            ++i;
+                            p = y;
+                            if((y->pid)==pid) break;
+                            if (it ==i ) {
+                                asdf = true;
+                            }
                         }
-                    }
-                    if (asdf) {
-                        --it;
-                        continue;
-                    }
-                    p->status = status;
-                    if (WIFSTOPPED(status)) {
-                        p->stopped = true;
-                    } else{
-                        p->completed = true;                    }
-                    break;
+                        if (asdf) {
+                            --it;
+                            continue;
+                        }
+                        p->status = status;
+                        if (WIFSTOPPED(status)) {
+                            p->stopped = true;
+                        } else{
+                            p->completed = true;
+                        }
+                        break;
+                }
             }
         }
-         } else {
+        else {
         printf("Child in background\n");
         printf("PID: %d\n", pid);
-    }
+        }
                     
-                }
-        
-        
-        if(fdinput!=0) dup2(0, fdinput);
-        if(fdoutput!=0) dup2(1, fdoutput);
-        
-        /* YOUR CODE HERE?  Parent-side code for new job.*/
-           seize_tty(getpid()); // assign the terminal back to dsh
     }
+        
+    if(fdinput!=0) dup2(0, fdinput);
+    if(fdoutput!=0) dup2(1, fdoutput);
+        
+    /* YOUR CODE HERE?  Parent-side code for new job.*/
+    seize_tty(getpid()); // assign the terminal back to dsh
+    }
+    
+    printf("outside for loop\n");
+
 }
 
 /*
