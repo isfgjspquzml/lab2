@@ -143,3 +143,6 @@ tcsetpgrp failure: No such process
 tcsetpgrp failure: No such process
 tcsetpgrp failure: No such process
 tcsetpgrp failure: No such process
+waitpid: No child processes
+waitpid: No child processes
+tcsetpgrp failure: Invalid argument
