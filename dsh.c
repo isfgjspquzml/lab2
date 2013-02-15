@@ -253,7 +253,7 @@ char* check_status( job_t* job){
 
     if(job_is_completed(job)){
         status="COMPLETED";
-    }else if(job_is_stopped){
+    }else if(job_is_stopped(job)){
         status="STOPPED";
     }else{
         status="RUNNING";
@@ -268,7 +268,6 @@ void cleanup(){
         if(cur->notified && job_is_completed(cur)){
             
             delete_job(cur,joblist);
-            free_job(cur,joblist);
         }
 
     }
@@ -406,28 +405,43 @@ int main(){
         /* spawn_job(j,true) */
         /* else */
         /* spawn_job(j,false) */
-        job_t * iter;
+        if(joblist==NULL){
+            joblist=j;
+            joblist->next=NULL;
+        }
+        else{
+            printf("SUP SONN\n");
+            job_t* cur;
+
+            for(cur = joblist;cur->next!=NULL;cur=cur->next){
+                printf("hihihihi\n"); 
+            }
+            cur->next=j;
+        } 
+        job_t* iter; 
         for(iter=j;iter!=NULL;iter=iter->next){
             printf("%s\n",j->commandinfo);
-            if(!builtin_cmd(j,j->first_process->argc,j->first_process->argv)){
+            if(!builtin_cmd(iter,iter->first_process->argc,iter->first_process->argv)){
                 printf("HELLO\n");
-                if(!joblist){
-                    joblist=j;
+              /*  if(joblist==NULL){
+                    joblist=iter;
+                    joblist->next=NULL;
                 }
                 else{
                     printf("SUP SONN\n");
-                    job_t* cur=joblist;
-                    while(cur->next!=NULL){
-                        cur=cur->next;
-                    }
-                    cur->next=j;
-               }
+                    job_t* cur;
+                    for(cur = joblist;cur!=NULL;cur=cur->next){
+                            printf("hihihihi\n"); 
+                       }
+                    printf("%s\n",cur->commandinfo);
+                    cur->next=iter;
+               } */
                if(!j->bg){
                     printf("hi\n");
-                    spawn_job(j,true);
+                    spawn_job(iter,true);
                 }
                 else{
-                    spawn_job(j,false);
+                    spawn_job(iter,false);
                 }
             }
           
