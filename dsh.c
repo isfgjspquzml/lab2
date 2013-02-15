@@ -170,6 +170,9 @@ void spawn_job(job_t *j, bool fg)
                 }
         }
         
+        if(fdinput!=0) dup2(0, fdinput);
+        if(fdoutput!=0) dup2(1, fdoutput);
+        
         /* YOUR CODE HERE?  Parent-side code for new job.*/
 	    seize_tty(getpid()); // assign the terminal back to dsh
     }
@@ -287,7 +290,7 @@ int main(){
 		if(!(j = readcmdline(promptmsg(buf)))) {
 			if (feof(stdin)) { /* End of file (ctrl-d) */
 				fflush(stdout);
-                close_log();
+                close_log(); 
 				printf("\n");
 				exit(EXIT_SUCCESS);
             }
