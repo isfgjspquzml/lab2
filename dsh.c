@@ -135,7 +135,7 @@ bool builtin_cmd(job_t *last_job, int argc, char **argv)
             for(i=0;i<20;i++){
                 if(joblist[i]!=NULL){
                     printf("%u: %s \n",i, joblist[i]->commandinfo);
-                    if(joblist[i]->first_process->completed){
+                    if(job_is_completed(joblist[i])){
                         joblist[i]=NULL;
                     }
                 }
