@@ -47,6 +47,7 @@ void new_child(job_t *j, process_t *p, bool fg)
 }
 
 job_t * joblist[25];
+static int log;
 
 /* Spawning a process with job control. fg is true if the
  * newly-created process is to be placed in the foreground.
@@ -260,8 +261,24 @@ char* promptmsg(char* buf)
     return buf;
 }
 
+// Log
+
+void init_log() {
+    log = open("dsh.log", O_WRONLY|O_APPEND|O_CLOEXEC|O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+    dup2(log, STDERR_FILENO);
+}
+
+void close_log() {
+    if (log_file > 0) {
+        if (close(log_file) < 0) {
+            perror("Unable to close dsh.log\n");
+        }
+    }
+}
+
 int main(){
     
+    init_log();
 	init_dsh();
 	DEBUG("Successfully initialized\n");
     char buf[150];
@@ -270,6 +287,7 @@ int main(){
 		if(!(j = readcmdline(promptmsg(buf)))) {
 			if (feof(stdin)) { /* End of file (ctrl-d) */
 				fflush(stdout);
+                close_log();
 				printf("\n");
 				exit(EXIT_SUCCESS);
             }
