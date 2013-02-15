@@ -65,8 +65,7 @@ void spawn_job(job_t *j, bool fg)
 	pid_t pid;
 	process_t *p;
 
-    int status;
-    int iterator; // To avoid having to use C99 mode, idk if necessary
+
 
     // I/O stuff
     int fdinput;
@@ -81,6 +80,8 @@ void spawn_job(job_t *j, bool fg)
     int pipefd[2*(i-1)];
     pipe(pipefd);
     
+    int it;
+    int status;
     // Iterate through each process
 	for(p = j->first_process; p; p = p->next) {
         
@@ -88,9 +89,8 @@ void spawn_job(job_t *j, bool fg)
         
         /* YOUR CODE HERE? */
         /* Builtin commands are already taken care earlier */
-        
+        int inputfile,outputfile;
         switch (pid = fork()) {
-                
             case -1: /* fork failure */
                 perror("fork");
                 exit(EXIT_FAILURE);
@@ -102,7 +102,7 @@ void spawn_job(job_t *j, bool fg)
                 /* YOUR CODE HERE?  Child-side code for new process. */
                 if (j->pgid<0) j->pgid=getpid();
                 if (setpgid(0,j->pgid)==0 && fg) tcsetpgrp(STDIN_FILENO,j->pgid);
-                
+                printf("hi\n");
                 // input/output stuff
                 if(p->ifile!=NULL) {
                     fdinput = open(p->ifile, O_WRONLY);
@@ -141,9 +141,9 @@ void spawn_job(job_t *j, bool fg)
                         dup2(pipefd[2*k-2], 0);
                         dup2(pipefd[2*k+1], 1);
                     }
-                    
-                    for(iterator=0; iterator<i; iterator++) {
-                        close(pipefd[iterator]);
+                  
+                    for(it=0; it<i; it++) {
+                        close(pipefd[it]);
                     }
                     printf("end");
                 }
@@ -163,8 +163,8 @@ void spawn_job(job_t *j, bool fg)
                 setpgid(pid, j->pgid);
                
                 /* YOUR CODE HERE?  Parent-side code for new process.  */
-                
-                for(iterator=0; iterator<i; iterator++) {
+             
+                for(it=0; it; it++) {
                     waitpid(pid,&status,0);
                     printf("child %d exited with status %d\n",pid,WEXITSTATUS(status));
                 }
