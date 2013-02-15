@@ -46,7 +46,7 @@ void new_child(job_t *j, process_t *p, bool fg)
     signal(SIGTTOU, SIG_DFL);
 }
 
-job_t * joblist[25];
+job_t * joblist=NULL;
 
 /* Spawning a process with job control. fg is true if the
  * newly-created process is to be placed in the foreground.
@@ -196,39 +196,30 @@ bool builtin_cmd(job_t *last_job, int argc, char **argv)
         /* Your code here */
         // Already done
         exit(EXIT_SUCCESS);
-	}
-<<<<<<< HEAD
-        else if (!strcmp("jobs", argv[0])) {
-            /* Your code here */
-            int i;
-            for(i=0;i<20;i++){
-                if(joblist[i]!=NULL){
-                    printf("%u: %s \n",i, joblist[i]->commandinfo);
-                    if(job_is_completed(joblist[i])){
-                        joblist[i]=NULL;
-                    }
-=======
+    }
     else if (!strcmp("jobs", argv[0])) {
         /* Your code here */
-        int i;
-        for(i=0;i<20;i++){
-            if(joblist[i]!=NULL){
-                printf("%u: %s \n",i, joblist[i]->commandinfo);
-                if(joblist[i]->first_process->completed){
-                    joblist[i]=NULL;
->>>>>>> c809f397e2ae67d927d07460be6e1398815dc779
+        job_t* cur;
+        
+        for(cur=joblist;cur!=NULL;cur=cur->next){
+            if(cur!=NULL){
+                printf("%u: %s \n",cur->pgid, cur->commandinfo);
+                if(cur->first_process->completed){
+                   delete_job(cur, joblist);
                 }
             }
         }
         return true;
     }
-	else if (!strcmp("cd", argv[0])) {
+    else if (!strcmp("cd", argv[0])) {
         /* Your code here */
         chdir(argv[1]);
+        return true;
     }
     else if (!strcmp("bg", argv[0])) {
         /* Your code here */
         continue_job(atoi(argv[1]));
+        return true;
     }
     else if (!strcmp("fg", argv[0])) {
         /* Your code here */
@@ -241,6 +232,7 @@ bool builtin_cmd(job_t *last_job, int argc, char **argv)
         else{
             tcsetpgrp(fd, last_job->pgid);
         }
+        return true;
     }
     
     return false;       /* not a builtin command */
@@ -264,7 +256,7 @@ int main(){
     
 	init_dsh();
 	DEBUG("Successfully initialized\n");
-    char buf[150];
+        char buf[150];
 	while(1) {
         job_t *j = NULL;
 		if(!(j = readcmdline(promptmsg(buf)))) {
@@ -288,17 +280,19 @@ int main(){
         /* spawn_job(j,true) */
         /* else */
         /* spawn_job(j,false) */
-        
         while(j!=NULL){
             if(!builtin_cmd(j,j->first_process->argc,j->first_process->argv)){
-                                
-                int i=0;
-                while(joblist[i]!=NULL){
-                    i++;
+                if(!joblist){
+                    joblist=j;
                 }
-                joblist[i]=j;
-                
-                if(!j->bg){
+                else{
+                    job_t* cur=joblist;
+                    while(cur->next!=NULL){
+                        cur=cur->next;
+                    }
+                    cur->next=j;
+               }
+               if(!j->bg){
                     spawn_job(j,true);
                 }
                 else{
