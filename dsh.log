@@ -20,3 +20,25 @@ dsh.c:182:6: note: expected ‘struct job_t *’ but argument is of type ‘int�
 dsh.c: In function ‘spawn_job’:
 dsh.c:173:11: warning: ‘fdinput’ may be used uninitialized in this function [-Wuninitialized]
 dsh.c:174:11: warning: ‘fdoutput’ may be used uninitialized in this function [-Wuninitialized]
+Usage:
+  kill pid ...              Send SIGTERM to every process listed.
+  kill signal pid ...       Send a signal to every process listed.
+  kill -s signal pid ...    Send a signal to every process listed.
+  kill -l                   List all signal names.
+  kill -L                   List all signal names in a nice table.
+  kill -l signal            Convert between signal numbers and names.
+dsh.c: In function ‘spawn_job’:
+dsh.c:76:9: warning: unused variable ‘status’ [-Wunused-variable]
+dsh.c: In function ‘check_status’:
+dsh.c:246:14: warning: the address of ‘job_is_stopped’ will always evaluate as ‘true’ [-Waddress]
+dsh.c: In function ‘cleanup’:
+dsh.c:260:13: warning: implicit declaration of function ‘free_job’ [-Wimplicit-function-declaration]
+dsh.c: In function ‘builtin_cmd’:
+dsh.c:314:9: warning: passing argument 1 of ‘continue_job’ makes pointer from integer without a cast [enabled by default]
+dsh.c:65:6: note: expected ‘struct job_t *’ but argument is of type ‘int’
+dsh.c: In function ‘spawn_job’:
+dsh.c:228:11: warning: ‘fdinput’ may be used uninitialized in this function [-Wuninitialized]
+dsh.c:229:11: warning: ‘fdoutput’ may be used uninitialized in this function [-Wuninitialized]
+New child should have done an exec: No such file or directory
+New child should have done an exec: No such file or directory
+New child should have done an exec: No such file or directory
