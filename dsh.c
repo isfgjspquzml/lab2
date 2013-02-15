@@ -70,10 +70,8 @@ void continue_job(job_t *j)
 void spawn_job(job_t *j, bool fg)
 {
     
-    printf("Spawn job\n");
-    
-	pid_t pid;
-	process_t *p;
+    pid_t pid;
+    process_t *p;
 
     int status;
     int iterator; // To avoid having to use C99 mode, idk if necessary
@@ -83,22 +81,21 @@ void spawn_job(job_t *j, bool fg)
     int fdoutput;
         
     // Setting up pipes
-    int i;
-    int k;
-    i=0;
+    int i,k;
+    i=0, k=0;
     for(p = j->first_process; p; p = p->next) i++;
-    k = 0;
+    
     int pipefd[2*(i-1)];
     for(iterator=0; iterator<i-1; iterator++) pipe(pipefd+2*iterator);
     
     printf("for loop\n");
     
     // Iterate through each process
-	for(p = j->first_process; p; p = p->next) {
+    for(p = j->first_process; p; p = p->next) {
         k++;
         
-        /* YOUR CODE HERE? */
-        /* Builtin commands are already taken care earlier */
+    /* YOUR CODE HERE? */
+    /* Builtin commands are already taken care earlier */
         
         printf("Switch Statement\n");
         switch (pid = fork()) {
@@ -108,7 +105,7 @@ void spawn_job(job_t *j, bool fg)
                 exit(EXIT_FAILURE);
                 
             case 0: /* child process  */
-                printf("Child Process");
+                printf("Child Process\n");
                 p->pid = getpid();
                 new_child(j, p, fg);
                 
@@ -125,6 +122,7 @@ void spawn_job(job_t *j, bool fg)
                     }
                     else if(fdinput!=0 && k==1) dup2(fdinput, 0);
                 }
+
                 if(p->ofile!=NULL) {
                     fdoutput = open(p->ifile, O_WRONLY | O_CREAT | O_EXCL,
                                     S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
@@ -139,6 +137,7 @@ void spawn_job(job_t *j, bool fg)
                 // www.cs.loyola.edu/~jglenn/702/S2005/Examples/dup2.html
                 
                 if(i>1){
+
                     if(k==1) {
                         printf("first process in pipe");
                         dup2(pipefd[1], 1);
@@ -176,15 +175,15 @@ void spawn_job(job_t *j, bool fg)
                 setpgid(pid, j->pgid);
                
                 /* YOUR CODE HERE?  Parent-side code for new process.  */
-                
-                int status;
-                if (fg) {
+        }    
+        int status;
+        if (fg) {
 
-                int it;
-                for(it=0;it<i;it++) {
+            int it;
+            for(it=0;it<i;it++){
 
                 bool asdf;
-                int i;
+                int q;
                 process_t *y;
                 int pid;
                 switch (pid = waitpid(WAIT_ANY,&status,WUNTRACED)) {
@@ -194,50 +193,51 @@ void spawn_job(job_t *j, bool fg)
                         p->status = status;
                         exit(EXIT_FAILURE);
 
-                    case 0: // Should not occur
+                    case 0:
                         printf("Process still running\n");
                         p->status= status;
                         break;
 
                     default:
                         asdf= false;
-                        i = 0;
+                        q = 0;
                         for(y = j->first_process; y; y = y->next) {
                             ++i;
                             p = y;
                             if((y->pid)==pid) break;
-                            if (it ==i ) {
-                                asdf = true;
-                            }
+                            if (it ==q ) asdf = true;
                         }
+                        
                         if (asdf) {
                             --it;
                             continue;
                         }
                         p->status = status;
-                        if (WIFSTOPPED(status)) {
+                        if (WIFSTOPPED(status)){ 
                             p->stopped = true;
-                        } else{
+                        } 
+                        else{
                             p->completed = true;
-                        }
+                        }   
                         break;
+                    
                 }
-            }
+            }    
         }
         else {
-        printf("Child in background\n");
-        printf("PID: %d\n", pid);
+            printf("Child in background\n");
+            printf("PID: %d\n", pid);
         }
                     
-    }
+    
         
     if(fdinput!=0) dup2(0, fdinput);
     if(fdoutput!=0) dup2(1, fdoutput);
         
     /* YOUR CODE HERE?  Parent-side code for new job.*/
     seize_tty(getpid()); // assign the terminal back to dsh
-    }
     
+    }    
     printf("outside for loop\n");
 
 }
@@ -405,9 +405,11 @@ int main(){
         /* spawn_job(j,true) */
         /* else */
         /* spawn_job(j,false) */
-        while(j!=NULL){
-            printf("YOOO\n");
-            if(!builtin_cmd(j,j->first_process->argc,j->first_process->argv)&&!job_is_completed(j)){
+        job_t * iter;
+        for(iter=j;iter!=NULL;iter=iter->next){
+            printf("%s\n",j->commandinfo);
+            if(!builtin_cmd(j,j->first_process->argc,j->first_process->argv)){
+                printf("HELLO\n");
                 if(!joblist){
                     joblist=j;
                 }
@@ -419,15 +421,14 @@ int main(){
                     cur->next=j;
                }
                if(!j->bg){
-                    printf("SPWANEDDD\n");
+                    printf("hi\n");
                     spawn_job(j,true);
                 }
                 else{
                     spawn_job(j,false);
                 }
             }
-            printf("helloooo\n");
-          j=j->next;
+          
         }
     }
 }

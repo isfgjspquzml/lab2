@@ -76,3 +76,42 @@ waitpid: No child processes
 waitpid: No child processes
 waitpid: No child processes
 waitpid: No child processes
+New child should have done an exec: No such file or directory
+New child should have done an exec: No such file or directory
+New child should have done an exec: No such file or directory
+New child should have done an exec: No such file or directory
+New child should have done an exec: No such file or directory
+New child should have done an exec: No such file or directory
+New child should have done an exec: No such file or directory
+dsh.c: In function ‘spawn_job’:
+dsh.c:78:9: warning: unused variable ‘status’ [-Wunused-variable]
+dsh.c: In function ‘check_status’:
+dsh.c:255:14: warning: the address of ‘job_is_stopped’ will always evaluate as ‘true’ [-Waddress]
+dsh.c: In function ‘cleanup’:
+dsh.c:270:13: warning: implicit declaration of function ‘free_job’ [-Wimplicit-function-declaration]
+dsh.c: In function ‘builtin_cmd’:
+dsh.c:325:9: warning: passing argument 1 of ‘continue_job’ makes pointer from integer without a cast [enabled by default]
+dsh.c:65:6: note: expected ‘struct job_t *’ but argument is of type ‘int’
+dsh.c: In function ‘spawn_job’:
+dsh.c:234:7: warning: ‘fdinput’ may be used uninitialized in this function [-Wuninitialized]
+dsh.c:235:7: warning: ‘fdoutput’ may be used uninitialized in this function [-Wuninitialized]
+tcsetpgrp failure: No such process
+tcsetpgrp failure: No such process
+tcsetpgrp failure: No such process
+tcsetpgrp failure: No such process
+dsh.c: In function ‘spawn_job’:
+dsh.c:227:9: error: expected ‘}’ before ‘else’
+dsh.c:78:9: warning: unused variable ‘status’ [-Wunused-variable]
+dsh.c: At top level:
+dsh.c:241:12: error: expected declaration specifiers or ‘...’ before string constant
+dsh.c:243:1: error: expected identifier or ‘(’ before ‘}’ token
+dsh.c: In function ‘check_status’:
+dsh.c:255:14: warning: the address of ‘job_is_stopped’ will always evaluate as ‘true’ [-Waddress]
+dsh.c: In function ‘cleanup’:
+dsh.c:270:13: warning: implicit declaration of function ‘free_job’ [-Wimplicit-function-declaration]
+dsh.c: In function ‘builtin_cmd’:
+dsh.c:325:9: warning: passing argument 1 of ‘continue_job’ makes pointer from integer without a cast [enabled by default]
+dsh.c:65:6: note: expected ‘struct job_t *’ but argument is of type ‘int’
+make: *** [dsh] Error 1
+tcsetpgrp failure: No such process
+waitpid: No child processes
