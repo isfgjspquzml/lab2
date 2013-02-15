@@ -197,8 +197,7 @@ bool builtin_cmd(job_t *last_job, int argc, char **argv)
         // Already done
         exit(EXIT_SUCCESS);
 	}
-<<<<<<< HEAD
-        else if (!strcmp("jobs", argv[0])) {
+    else if (!strcmp("jobs", argv[0])) {
             /* Your code here */
             int i;
             for(i=0;i<20;i++){
@@ -207,7 +206,9 @@ bool builtin_cmd(job_t *last_job, int argc, char **argv)
                     if(job_is_completed(joblist[i])){
                         joblist[i]=NULL;
                     }
-=======
+                }
+            }
+    }
     else if (!strcmp("jobs", argv[0])) {
         /* Your code here */
         int i;
@@ -216,7 +217,6 @@ bool builtin_cmd(job_t *last_job, int argc, char **argv)
                 printf("%u: %s \n",i, joblist[i]->commandinfo);
                 if(joblist[i]->first_process->completed){
                     joblist[i]=NULL;
->>>>>>> c809f397e2ae67d927d07460be6e1398815dc779
                 }
             }
         }
