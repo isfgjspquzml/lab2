@@ -159,13 +159,8 @@ void spawn_job(job_t *j, bool fg)
                     }
                     printf("end");
                 }
-                
-                if(execvp(p->argv[0],p->argv)<0){
-                    perror("New child should have done an exec");
-                }
-                
-                exit(EXIT_FAILURE);  /* NOT REACHED */
-                break;    /* NOT REACHED */
+               execvp(p->argv[0],p->argv)  ;           
+               printf("hi2\n"); 
                 
             default: /* parent */
                 /* establish child process group */

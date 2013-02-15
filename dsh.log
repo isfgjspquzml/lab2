@@ -115,3 +115,13 @@ dsh.c:65:6: note: expected ‘struct job_t *’ but argument is of type ‘int�
 make: *** [dsh] Error 1
 tcsetpgrp failure: No such process
 waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
