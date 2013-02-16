@@ -146,3 +146,86 @@ tcsetpgrp failure: No such process
 waitpid: No child processes
 waitpid: No child processes
 tcsetpgrp failure: Invalid argument
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+tcsetpgrp failure: Invalid argument
+tcsetpgrp failure: Invalid argument
+grep: (standard input): Input/output error
+grep: (standard input): Input/output error
+grep: (standard input): Bad file descriptor
+grep: (standard input): Input/output error
+grep: (standard input): Input/output error
+tcsetpgrp failure: Invalid argument
+tcsetpgrp failure: Invalid argument
+The program is not being run.
+waitpid: Interrupted system call
+waitpid: Interrupted system call
+Quit
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+Usage: grep [OPTION]... PATTERN [FILE]...
+Try `grep --help' for more information.
+waitpid: Interrupted system call
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+tcsetpgrp failure: Invalid argument
+make: *** No rule to make target `gdb'.  Stop.
