@@ -94,12 +94,8 @@ void spawn_job(job_t *j, bool fg)
         
     /* YOUR CODE HERE? */
     /* Builtin commands are already taken care earlier */
-<<<<<<< HEAD
         
         switch (pid = fork()) {
-=======
-            switch (pid = fork()) {
->>>>>>> c2c49855a30c4b080ff6184f058d01f6f37696ed
                 
             case -1: /* fork failure */
                 perror("fork");
@@ -252,7 +248,7 @@ void spawn_job(job_t *j, bool fg)
 
 char* check_status( job_t* job){
     char* status;
-
+    
     if(job_is_completed(job)){
         status="COMPLETED";
     }else if(job_is_stopped(job)){
@@ -265,12 +261,14 @@ char* check_status( job_t* job){
 
 }
 void cleanup(){
-    job_t*cur;
-    for(cur=joblist;joblist!=NULL;joblist=joblist->next){
-        if(check_status(cur)=="COMPLETED"){
+    job_t*cur=joblist;
+    while(cur!=NULL){
+        if(job_is_completed(cur)){
             delete_job(cur,joblist);
+        }else{
+            cur=cur->next;
         }
-
+            
     }
 
 }
@@ -324,6 +322,7 @@ bool builtin_cmd(job_t *last_job, int argc, char **argv)
     else if (!strcmp("bg", argv[0])) {
         /* Your code here */
         if(!argv[1])    {
+            printf("no pgid\n");
             return true;
         }
         process_t* p;
@@ -340,11 +339,11 @@ bool builtin_cmd(job_t *last_job, int argc, char **argv)
 
         }
        
-        curj->bg=true;
+       
         for(p=curj->first_process;p!=NULL;p=p->next){
             p->stopped=false;
         }
-
+        curj->bg=true;
         printf("%s - %d\n",curj->first_process->argv[0], curj->pgid);
 
         continue_job(curj);

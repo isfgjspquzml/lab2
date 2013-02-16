@@ -303,3 +303,42 @@ reading bg: extra input ignoredCannot open output file
 Cannot open output file
 : No such file or directory
 >>>>>>> c2c49855a30c4b080ff6184f058d01f6f37696ed
+dsh.c: In function ‘spawn_job’:
+dsh.c:97:1: error: expected expression before ‘<<’ token
+dsh.c: In function ‘cleanup’:
+dsh.c:270:29: warning: comparison with string literal results in unspecified behavior [-Waddress]
+dsh.c: In function ‘spawn_job’:
+dsh.c:425:5: warning: ‘main’ is normally a non-static function [-Wmain]
+dsh.c: In function ‘main’:
+dsh.c:453:21: warning: implicit declaration of function ‘readprocessinfo’ [-Wimplicit-function-declaration]
+dsh.c: In function ‘spawn_job’:
+dsh.c:490:1: error: expected declaration or statement at end of input
+dsh.c:83:11: warning: variable ‘k’ set but not used [-Wunused-but-set-variable]
+dsh.c:80:9: warning: unused variable ‘fdoutput’ [-Wunused-variable]
+dsh.c:79:9: warning: unused variable ‘fdinput’ [-Wunused-variable]
+dsh.c:73:11: warning: unused variable ‘pid’ [-Wunused-variable]
+make: *** [dsh] Error 1
+ls: cannot access ls: No such file or directory
+dsh.c: In function ‘cleanup’:
+dsh.c:266:29: warning: comparison with string literal results in unspecified behavior [-Waddress]
+dsh.c: In function ‘main’:
+dsh.c:449:21: warning: implicit declaration of function ‘readprocessinfo’ [-Wimplicit-function-declaration]
+exec failed: No such file or directory
+waitpid: No child processes
+ls: cannot access ls: No such file or directory
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+dsh.c: In function ‘cleanup’:
+dsh.c:266:29: warning: comparison with string literal results in unspecified behavior [-Waddress]
+dsh.c: In function ‘main’:
+dsh.c:451:21: warning: implicit declaration of function ‘readprocessinfo’ [-Wimplicit-function-declaration]
+exec failed: No such file or directory
+waitpid: No child processes

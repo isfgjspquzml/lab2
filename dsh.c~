@@ -98,18 +98,13 @@ void spawn_job(job_t *j, bool fg)
         switch (pid = fork()) {
                 
             case -1: /* fork failure */
-                printf("FAIL\n");
                 perror("fork");
                 exit(EXIT_FAILURE);
                 
             case 0: /* child process  */
                 p->pid = getpid();
                 new_child(j, p, fg);
-                
-                /* YOUR CODE HERE?  Child-side code for new process. */
-                if (j->pgid<0) j->pgid=getpid();
-                if (setpgid(0,j->pgid)==0 && fg) tcsetpgrp(STDIN_FILENO,j->pgid);
-                
+                                                
                 // input/output stuff
                 if(p->ifile!=NULL) {
                     fdinput = open(p->ifile, O_RDWR);
@@ -152,6 +147,13 @@ void spawn_job(job_t *j, bool fg)
                         printf("close\n");
                     }
                 }
+                    
+                if (j->pgid<0)
+                    j->pgid=getpid();
+                    p->pid = 0;
+                    
+                if (!setpgid(0,j->pgid) && fg) tcsetpgrp(STDIN_FILENO,j->pgid);
+
 
                 if(execvp(p->argv[0],p->argv)<0){
                     perror("exec failed")  ;           
@@ -246,7 +248,7 @@ void spawn_job(job_t *j, bool fg)
 
 char* check_status( job_t* job){
     char* status;
-
+    
     if(job_is_completed(job)){
         status="COMPLETED";
     }else if(job_is_stopped(job)){
@@ -259,12 +261,15 @@ char* check_status( job_t* job){
 
 }
 void cleanup(){
-    job_t*cur;
-    for(cur=joblist;joblist!=NULL;joblist=joblist->next){
-        if(check_status(cur)=="COMPLETED"){
+    job_t*cur=joblist;
+    while(cur!=NULL){
+        if(job_is_completed(cur)){
             delete_job(cur,joblist);
+        }else{
+           
+            cur=cur->next;
         }
-
+            
     }
 
 }
@@ -303,12 +308,11 @@ bool builtin_cmd(job_t *last_job, int argc, char **argv)
                 char * status = check_status(cur);
                 
                 printf("%u: %s %s \n",cur->pgid,status, cur->commandinfo);
-                if(status="COMPLETED"){
-                    remove_job(cur);
-                }
+            
                 
             }
         }
+        cleanup();
         return true;
     }
     else if (!strcmp("cd", argv[0])) {
@@ -319,6 +323,7 @@ bool builtin_cmd(job_t *last_job, int argc, char **argv)
     else if (!strcmp("bg", argv[0])) {
         /* Your code here */
         if(!argv[1])    {
+            printf("no pgid\n");
             return true;
         }
         process_t* p;
@@ -335,11 +340,11 @@ bool builtin_cmd(job_t *last_job, int argc, char **argv)
 
         }
        
-        curj->bg=true;
+       
         for(p=curj->first_process;p!=NULL;p=p->next){
             p->stopped=false;
         }
-
+        curj->bg=true;
         printf("%s - %d\n",curj->first_process->argv[0], curj->pgid);
 
         continue_job(curj);
