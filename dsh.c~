@@ -87,7 +87,6 @@ void spawn_job(job_t *j, bool fg)
     int pipefd[2*(i-1)];
     for(iterator=0; iterator<i-1; iterator++) pipe(pipefd+2*iterator);
     
-    printf("for loop\n");
     
     // Iterate through each process
     for(p = j->first_process; p; p = p->next) {
@@ -95,7 +94,6 @@ void spawn_job(job_t *j, bool fg)
     /* YOUR CODE HERE? */
     /* Builtin commands are already taken care earlier */
         
-        printf("Switch Statement\n");
         switch (pid = fork()) {
                 
             case -1: /* fork failure */
@@ -103,7 +101,6 @@ void spawn_job(job_t *j, bool fg)
                 exit(EXIT_FAILURE);
                 
             case 0: /* child process  */
-                printf("Child Process\n");
                 p->pid = getpid();
                 new_child(j, p, fg);
                 
@@ -241,7 +238,6 @@ void spawn_job(job_t *j, bool fg)
     seize_tty(getpid()); // assign the terminal back to dsh
     
     }    
-    printf("outside for loop\n");
 
 }
 
@@ -267,8 +263,8 @@ char* check_status( job_t* job){
 void cleanup(){
     job_t*cur;
     for(cur=joblist;joblist!=NULL;joblist=joblist->next){
-        if(cur->notified && job_is_completed(cur)){
-            
+        if(check_status(cur)=="COMPLETED"){
+            printf("DELETING JOB\n");
             delete_job(cur,joblist);
         }
 
@@ -292,8 +288,7 @@ bool builtin_cmd(job_t *last_job, int argc, char **argv)
         job_t* cur;
         
         for(cur=joblist;cur!=NULL;cur=cur->next){
-            if(cur!=NULL){
-                if(!(cur->pgid==-1 || cur->notified)){
+                if(!(cur->pgid==-1 )){
                    
                       
                     if(cur->bg){
@@ -307,14 +302,13 @@ bool builtin_cmd(job_t *last_job, int argc, char **argv)
                         }       
                     }
 
-                }
+                
                 char * status = check_status(cur);
                 
                 printf("%u: %s %s \n",cur->pgid,status, cur->commandinfo);
                 
             }
         }
-        cleanup();
         return true;
     }
     else if (!strcmp("cd", argv[0])) {
@@ -324,19 +318,68 @@ bool builtin_cmd(job_t *last_job, int argc, char **argv)
     }
     else if (!strcmp("bg", argv[0])) {
         /* Your code here */
-        continue_job(atoi(argv[1]));
+        if(!argv[1])    {
+            return true;
+        }
+        process_t* p;
+        job_t * curj=NULL;
+        job_t * it;
+        for(it = joblist;it!=NULL;it=it->next){
+            if(it->pgid==atoi(argv[1])){
+                curj=it;
+            }
+        }
+        if(curj==NULL){
+            printf("did not recognize pgid\n");
+            return true;
+
+        }
+       
+        curj->bg=true;
+        for(p=curj->first_process;p!=NULL;p=p->next){
+            p->stopped=false;
+        }
+
+        printf("%s - %d\n",curj->first_process->argv[0], curj->pgid);
+
+        continue_job(curj);
         return true;
     }
     else if (!strcmp("fg", argv[0])) {
         /* Your code here */
-        int fd;
-        fd = open(argv[0], O_WRONLY);
-        if(fd < 0) {
-            perror("Cannot open output file\n");
-            exit(1);
+        if (!argv[1]){
+            return true;
         }
-        else{
-            tcsetpgrp(fd, last_job->pgid);
+
+        int pid = atoi(argv[1]);
+        job_t * curj=NULL;
+        job_t * it;
+        for(it = joblist;it!=NULL;it=it->next){
+            if(it->pgid==atoi(argv[1])){
+                curj=it;
+            }
+        }
+        if(curj==NULL){
+            printf("did not recognize pgid\n");
+            return true;
+
+        }
+        if(job_is_stopped(curj)){
+            printf("continuing\n");
+            continue_job(curj);
+        }
+        int status;
+
+        if(waitpid(pid,&status,0)>0){
+            printf("%d\n",pid);
+
+        }
+        process_t* x;
+
+        for(x=curj->first_process;x;x=x->next){
+            x->completed=true;
+            x->status=status;
+
         }
         return true;
     }
@@ -405,7 +448,7 @@ int main(){
                     aout->first_process=aoutp;
                     job_t* last = find_last_job(j);
                     
-                    j->next = aout;
+                    last->next = aout;
                  }
         /* Only for debugging purposes to show parser output; turn off in the
          * final code */
