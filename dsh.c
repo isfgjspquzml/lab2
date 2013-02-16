@@ -81,8 +81,9 @@ void spawn_job(job_t *j, bool fg)
         
     // Setting up pipes
     int i,k;
-    i=0, k=1;
-    for(p = j->first_process; p; p = p->next) i++;
+    i=0, k=0;
+    process_t *q;
+    for(q = j->first_process; q; q = q->next) i++;
     
     int pipefd[2*(i-1)];
     for(iterator=0; iterator<i-1; iterator++) pipe(pipefd+2*iterator);
@@ -99,6 +100,7 @@ void spawn_job(job_t *j, bool fg)
         switch (pid = fork()) {
                 
             case -1: /* fork failure */
+                printf("FAIL\n");
                 perror("fork");
                 exit(EXIT_FAILURE);
                 
@@ -113,7 +115,7 @@ void spawn_job(job_t *j, bool fg)
                 
                 // input/output stuff
                 if(p->ifile!=NULL) {
-                    fdinput = open(p->ifile, O_WRONLY);
+                    fdinput = open(p->ifile, O_RDWR);
                     if(fdinput < 0) {
                         perror("Cannot open output file\n");
                         exit(1);
@@ -122,7 +124,7 @@ void spawn_job(job_t *j, bool fg)
                 }
 
                 if(p->ofile!=NULL) {
-                    fdoutput = open(p->ifile, O_WRONLY | O_CREAT | O_EXCL,
+                    fdoutput = open(p->ifile, O_RDWR | O_CREAT | O_EXCL,
                                     S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
                     if(fdoutput < 0) {
                         perror("Cannot open output file\n");
@@ -132,35 +134,26 @@ void spawn_job(job_t *j, bool fg)
                 }
                 
                 // pipes
-                // www.cs.loyola.edu/~jglenn/702/S2005/Examples/dup2.html
                 
-                if(i>1){
-
-                    printf("k %i\n", k);
-                    
-                    if(k==1) {
-                        printf("first process in pipe\n");
+                if(i>1){                    
+                    if(k==0) {
                         dup2(pipefd[1], 1);
-                        printf("test\n");
                     }
 
-                    else if(k==i){
-                        printf("last process in pipe\n");
-                        dup2(pipefd[2*k-1], 0);
-                        printf("test\n");
+                    else if(k==i-1){
+                        dup2(pipefd[2*k-2], 0);
                     }
                     
                     else{
-                        printf("process in pipe\n");
-                        dup2(pipefd[2*(k-1)-2], 0);
-                        dup2(pipefd[2*(k-1)+1], 1);
-                        printf("test\n");
+                        dup2(pipefd[2*k-2], 0);
+                        dup2(pipefd[2*k+1], 1);
+                        printf("Hello\n");
                     }
                     
                     for(iterator=0; iterator<i; iterator++) {
                         close(pipefd[iterator]);
+                        printf("close\n");
                     }
-                    printf("end\n");
                 }
 
                 if(execvp(p->argv[0],p->argv)<0){
@@ -380,7 +373,7 @@ void close_log() {
 
 int main(){
     
-        init_log();
+    init_log();
 	init_dsh();
 	DEBUG("Successfully initialized\n");
         char buf[150];
