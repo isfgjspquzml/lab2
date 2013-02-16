@@ -278,3 +278,18 @@ waitpid: No child processes
 waitpid: No child processes
 waitpid: No child processes
 >>>>>>> 93e957b095a36e946312857fba22ee29e7579140
+exec failed: No such file or directory
+waitpid: No child processes
+dsh.c: In function ‘cleanup’:
+dsh.c:264:29: warning: comparison with string literal results in unspecified behavior [-Waddress]
+dsh.c: In function ‘builtin_cmd’:
+dsh.c:306:17: warning: suggest parentheses around assignment used as truth value [-Wparentheses]
+dsh.c:307:21: warning: implicit declaration of function ‘remove_job’ [-Wimplicit-function-declaration]
+dsh.c: In function ‘main’:
+dsh.c:447:21: warning: implicit declaration of function ‘readprocessinfo’ [-Wimplicit-function-declaration]
+/tmp/cc6jAphr.o: In function `builtin_cmd':
+/home/alexpien/git/lab2/dsh.c:307: undefined reference to `remove_job'
+collect2: ld returned 1 exit status
+make: *** [dsh] Error 1
+exec failed: No such file or directory
+waitpid: No child processes

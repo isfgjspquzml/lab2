@@ -262,7 +262,6 @@ void cleanup(){
     job_t*cur;
     for(cur=joblist;joblist!=NULL;joblist=joblist->next){
         if(check_status(cur)=="COMPLETED"){
-            printf("DELETING JOB\n");
             delete_job(cur,joblist);
         }
 
@@ -304,9 +303,11 @@ bool builtin_cmd(job_t *last_job, int argc, char **argv)
                 char * status = check_status(cur);
                 
                 printf("%u: %s %s \n",cur->pgid,status, cur->commandinfo);
+            
                 
             }
         }
+        cleanup();
         return true;
     }
     else if (!strcmp("cd", argv[0])) {
