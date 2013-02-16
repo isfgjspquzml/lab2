@@ -194,3 +194,23 @@ hint: and then use 'git add/rm <file>' as
 hint: appropriate to mark resolution and make a commit,
 hint: or use 'git commit -a'.
 fatal: Exiting because of an unresolved conflict.
+exec failed: No such file or directory
+waitpid: No child processes
+dsh.c: In function ‘builtin_cmd’:
+dsh.c:327:9: warning: passing argument 1 of ‘continue_job’ makes pointer from integer without a cast [enabled by default]
+dsh.c:65:6: note: expected ‘struct job_t *’ but argument is of type ‘int’
+dsh.c: In function ‘main’:
+dsh.c:404:21: warning: implicit declaration of function ‘readprocessinfo’ [-Wimplicit-function-declaration]
+dsh.c: In function ‘builtin_cmd’:
+dsh.c:327:9: warning: passing argument 1 of ‘continue_job’ makes pointer from integer without a cast [enabled by default]
+dsh.c:65:6: note: expected ‘struct job_t *’ but argument is of type ‘int’
+dsh.c: In function ‘main’:
+dsh.c:404:21: warning: implicit declaration of function ‘readprocessinfo’ [-Wimplicit-function-declaration]
+exec failed: No such file or directory
+waitpid: No child processes
+dsh.c: In function ‘builtin_cmd’:
+dsh.c:327:9: warning: passing argument 1 of ‘continue_job’ makes pointer from integer without a cast [enabled by default]
+dsh.c:65:6: note: expected ‘struct job_t *’ but argument is of type ‘int’
+dsh.c: In function ‘main’:
+dsh.c:404:21: warning: implicit declaration of function ‘readprocessinfo’ [-Wimplicit-function-declaration]
+dsh.c:406:28: warning: unused variable ‘last’ [-Wunused-variable]
