@@ -214,3 +214,5 @@ dsh.c:65:6: note: expected ‘struct job_t *’ but argument is of type ‘int�
 dsh.c: In function ‘main’:
 dsh.c:404:21: warning: implicit declaration of function ‘readprocessinfo’ [-Wimplicit-function-declaration]
 dsh.c:406:28: warning: unused variable ‘last’ [-Wunused-variable]
+waitpid: No child processes
+waitpid: No child processes
