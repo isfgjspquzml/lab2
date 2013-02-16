@@ -81,7 +81,7 @@ void spawn_job(job_t *j, bool fg)
         
     // Setting up pipes
     int i,k;
-    i=0, k=0;
+    i=0, k=1;
     for(p = j->first_process; p; p = p->next) i++;
     
     int pipefd[2*(i-1)];
@@ -136,20 +136,25 @@ void spawn_job(job_t *j, bool fg)
                 
                 if(i>1){
 
+                    printf("k %i\n", k);
+                    
                     if(k==1) {
                         printf("first process in pipe\n");
                         dup2(pipefd[1], 1);
+                        printf("test\n");
                     }
 
                     else if(k==i){
                         printf("last process in pipe\n");
                         dup2(pipefd[2*k-1], 0);
+                        printf("test\n");
                     }
                     
                     else{
                         printf("process in pipe\n");
                         dup2(pipefd[2*(k-1)-2], 0);
                         dup2(pipefd[2*(k-1)+1], 1);
+                        printf("test\n");
                     }
                     
                     for(iterator=0; iterator<i; iterator++) {

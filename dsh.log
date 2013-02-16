@@ -234,3 +234,9 @@ exec failed: No such file or directory
 waitpid: No child processes
 waitpid: No child processes
 waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+waitpid: Interrupted system call
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
