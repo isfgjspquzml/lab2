@@ -412,7 +412,7 @@ int main(){
                     job_t* last = find_last_job(j);
                     
                     printf("8\n");
-                    j->next = aout;
+                    last->next = aout;
                  }
         /* Only for debugging purposes to show parser output; turn off in the
          * final code */
@@ -440,8 +440,6 @@ int main(){
         } 
         job_t* iter; 
         for(iter=j;iter!=NULL;iter=iter->next){
-        printf("ASDF\n");
-        printf("ASDF %i",iter->first_process->argc);
             if(!builtin_cmd(iter,iter->first_process->argc,iter->first_process->argv)){
                 
             

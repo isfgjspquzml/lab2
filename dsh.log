@@ -175,3 +175,10 @@ dsh.c:321:9: warning: passing argument 1 of ‘continue_job’ makes pointer fro
 dsh.c:65:6: note: expected ‘struct job_t *’ but argument is of type ‘int’
 dsh.c: In function ‘main’:
 dsh.c:391:33: warning: ‘aout’ may be used uninitialized in this function [-Wuninitialized]
+dsh.c: In function ‘spawn_job’:
+dsh.c:76:9: warning: unused variable ‘status’ [-Wunused-variable]
+dsh.c: In function ‘builtin_cmd’:
+dsh.c:323:9: warning: passing argument 1 of ‘continue_job’ makes pointer from integer without a cast [enabled by default]
+dsh.c:65:6: note: expected ‘struct job_t *’ but argument is of type ‘int’
+dsh.c: In function ‘main’:
+dsh.c:407:21: warning: implicit declaration of function ‘readprocessinfo’ [-Wimplicit-function-declaration]
