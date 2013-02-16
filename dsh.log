@@ -216,3 +216,21 @@ dsh.c:404:21: warning: implicit declaration of function ‘readprocessinfo’ [-
 dsh.c:406:28: warning: unused variable ‘last’ [-Wunused-variable]
 waitpid: No child processes
 waitpid: No child processes
+waitpid: Interrupted system call
+waitpid: Interrupted system call
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes

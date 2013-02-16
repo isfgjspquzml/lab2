@@ -137,17 +137,17 @@ void spawn_job(job_t *j, bool fg)
                 if(i>1){
 
                     if(k==1) {
-                        printf("first process in pipe");
+                        printf("first process in pipe\n");
                         dup2(pipefd[1], 1);
                     }
 
                     else if(k==i){
-                        printf("last process in pipe");
+                        printf("last process in pipe\n");
                         dup2(pipefd[2*k-1], 0);
                     }
                     
                     else{
-                        printf("process in pipe");
+                        printf("process in pipe\n");
                         dup2(pipefd[2*(k-1)-2], 0);
                         dup2(pipefd[2*(k-1)+1], 1);
                     }
@@ -155,7 +155,7 @@ void spawn_job(job_t *j, bool fg)
                     for(iterator=0; iterator<i; iterator++) {
                         close(pipefd[iterator]);
                     }
-                    printf("end");
+                    printf("end\n");
                 }
 
                 if(execvp(p->argv[0],p->argv)<0){
