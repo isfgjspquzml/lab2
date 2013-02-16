@@ -143,6 +143,7 @@ tcsetpgrp failure: No such process
 tcsetpgrp failure: No such process
 tcsetpgrp failure: No such process
 tcsetpgrp failure: No such process
+<<<<<<< HEAD
 tcsetpgrp failure: No such process
 tcsetpgrp failure: No such process
 tcsetpgrp failure: No such process
@@ -182,3 +183,14 @@ dsh.c:323:9: warning: passing argument 1 of ‘continue_job’ makes pointer fro
 dsh.c:65:6: note: expected ‘struct job_t *’ but argument is of type ‘int’
 dsh.c: In function ‘main’:
 dsh.c:407:21: warning: implicit declaration of function ‘readprocessinfo’ [-Wimplicit-function-declaration]
+=======
+waitpid: No child processes
+waitpid: No child processes
+tcsetpgrp failure: Invalid argument
+>>>>>>> a251e5c60d02a0f6fab2d6ecdc23c55ac303af3e
+error: 'commit' is not possible because you have unmerged files.
+hint: Fix them up in the work tree,
+hint: and then use 'git add/rm <file>' as
+hint: appropriate to mark resolution and make a commit,
+hint: or use 'git commit -a'.
+fatal: Exiting because of an unresolved conflict.

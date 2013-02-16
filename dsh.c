@@ -73,7 +73,6 @@ void spawn_job(job_t *j, bool fg)
     pid_t pid;
     process_t *p;
 
-    int status;
     int iterator; // To avoid having to use C99 mode, idk if necessary
 
     // I/O stuff
@@ -92,7 +91,6 @@ void spawn_job(job_t *j, bool fg)
     
     // Iterate through each process
     for(p = j->first_process; p; p = p->next) {
-        k++;
         
     /* YOUR CODE HERE? */
     /* Builtin commands are already taken care earlier */
@@ -150,8 +148,8 @@ void spawn_job(job_t *j, bool fg)
                     
                     else{
                         printf("process in pipe");
-                        dup2(pipefd[2*k-2], 0);
-                        dup2(pipefd[2*k+1], 1);
+                        dup2(pipefd[2*(k-1)-2], 0);
+                        dup2(pipefd[2*(k-1)+1], 1);
                     }
                     
                     for(iterator=0; iterator<i; iterator++) {
@@ -166,6 +164,8 @@ void spawn_job(job_t *j, bool fg)
                 
             default: /* parent */
                 /* establish child process group */
+
+                k++;
                 
                 p->pid = pid;
                 set_child_pgid(j, p);
@@ -174,7 +174,16 @@ void spawn_job(job_t *j, bool fg)
                 setpgid(pid, j->pgid);
 
                 /* YOUR CODE HERE?  Parent-side code for new process.  */
-        }    
+        }
+        
+        if(i>1){
+            for(iterator=0; iterator<i; iterator++) {
+                close(pipefd[iterator]);
+            }
+        }
+        if(fdinput!=0) dup2(0, fdinput);
+        if(fdoutput!=0) dup2(1, fdoutput);
+        
         int status;
         
         if (fg) {
@@ -228,11 +237,6 @@ void spawn_job(job_t *j, bool fg)
             printf("PID: %d\n", pid);
         }
                    
-    
-        
-    if(fdinput!=0) dup2(0, fdinput);
-    if(fdoutput!=0) dup2(1, fdoutput);
-        
     /* YOUR CODE HERE?  Parent-side code for new job.*/
     seize_tty(getpid()); // assign the terminal back to dsh
     
