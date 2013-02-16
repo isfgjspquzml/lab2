@@ -364,3 +364,11 @@ dsh.c:313:28: note: each undeclared identifier is reported only once for each fu
 dsh.c: In function ‘main’:
 dsh.c:458:21: warning: implicit declaration of function ‘readprocessinfo’ [-Wimplicit-function-declaration]
 make: *** [dsh] Error 1
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes

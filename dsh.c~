@@ -265,13 +265,12 @@ void cleanup(){
     while(cur!=NULL){
  
         if(job_is_completed(cur)&&cur->notified){
-            printf("hi\n");
-            
+                     
             delete_job(cur,joblist);
-            
-            }else{
-            cur=cur->next;
-            printf("ASDFASDF\n");
+          
+            }else{            
+                cur=cur->next;
+              
             }        
             
     }
@@ -294,8 +293,7 @@ bool builtin_cmd(job_t *last_job, int argc, char **argv)
         job_t* cur;
         
         for(cur=joblist;cur!=NULL;cur=cur->next){
-                if(!(cur->pgid==-1 )){
-                   
+                if(!(cur->pgid==-1 ||cur->notified)){                   
                       
                     if(cur->bg){
                         process_t* curp;
@@ -318,7 +316,7 @@ bool builtin_cmd(job_t *last_job, int argc, char **argv)
                 
             }
         }
-        cleanup();
+        
         return true;
     }
     else if (!strcmp("cd", argv[0])) {
@@ -491,5 +489,5 @@ int main(){
             }
           
         }
-    }
+            }
 }
