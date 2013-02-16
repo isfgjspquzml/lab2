@@ -160,3 +160,18 @@ exec failed: No such file or directory
 waitpid: No child processes
 exec failed: No such file or directory
 waitpid: No child processes
+To http://github.com/isfgjspquzml/lab2
+ ! [rejected]        master -> master (non-fast-forward)
+error: failed to push some refs to 'http://github.com/isfgjspquzml/lab2'
+To prevent you from losing history, non-fast-forward updates were rejected
+Merge the remote changes (e.g. 'git pull') before pushing again.  See the
+'Note about fast-forwards' section of 'git push --help' for details.
+exec failed: No such file or directory
+waitpid: No child processes
+dsh.c: In function ‘spawn_job’:
+dsh.c:76:9: warning: unused variable ‘status’ [-Wunused-variable]
+dsh.c: In function ‘builtin_cmd’:
+dsh.c:321:9: warning: passing argument 1 of ‘continue_job’ makes pointer from integer without a cast [enabled by default]
+dsh.c:65:6: note: expected ‘struct job_t *’ but argument is of type ‘int’
+dsh.c: In function ‘main’:
+dsh.c:391:33: warning: ‘aout’ may be used uninitialized in this function [-Wuninitialized]

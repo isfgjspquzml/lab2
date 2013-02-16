@@ -166,14 +166,17 @@ void spawn_job(job_t *j, bool fg)
                 
             default: /* parent */
                 /* establish child process group */
+                
                 p->pid = pid;
                 set_child_pgid(j, p);
+                
                 if(j->pgid<0) j->pgid = pid;
                 setpgid(pid, j->pgid);
-               
+
                 /* YOUR CODE HERE?  Parent-side code for new process.  */
         }    
         int status;
+        
         if (fg) {
             int it;
             int pid;
@@ -181,7 +184,6 @@ void spawn_job(job_t *j, bool fg)
                 bool asdf;
                 int q; 
                 process_t *y;
-                
                 switch (pid = waitpid(WAIT_ANY,&status,WUNTRACED)) {
 
                     case -1:
@@ -387,7 +389,30 @@ int main(){
                 if(endswith(j->first_process->argv[0],".c")){
                     j->first_process->argv[1]=j->first_process->argv[0];
                     j->first_process->argv[0]="gcc";
-          
+                    printf("1\n");
+                    job_t* aout=(job_t *) malloc(sizeof(job_t));
+                    
+                    printf("2\n");
+                    init_job(aout);
+                    
+                    printf("3\n");
+                    process_t * aoutp=(process_t*)malloc(sizeof(process_t));
+                   if(aoutp){
+                    printf("WHAT THE FUCK\n");
+                   }
+                    printf("4\n");
+                    init_process(aoutp);
+                    printf("5\n");
+                    
+                    readprocessinfo(aoutp,"./a.out");
+                    printf("ASDFADSF\n");
+                    printf("6\n");
+                    aout->first_process=aoutp;
+                    printf("7\n");
+                    job_t* last = find_last_job(j);
+                    
+                    printf("8\n");
+                    j->next = aout;
                  }
         /* Only for debugging purposes to show parser output; turn off in the
          * final code */
@@ -415,9 +440,11 @@ int main(){
         } 
         job_t* iter; 
         for(iter=j;iter!=NULL;iter=iter->next){
-          
+        printf("ASDF\n");
+        printf("ASDF %i",iter->first_process->argc);
             if(!builtin_cmd(iter,iter->first_process->argc,iter->first_process->argv)){
-
+                
+            
                if(!j->bg){
                     spawn_job(iter,true);
                 }
