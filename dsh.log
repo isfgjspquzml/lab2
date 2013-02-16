@@ -257,3 +257,10 @@ waitpid: No child processes
 waitpid: No child processes
 waitpid: No child processes
 waitpid: No child processes
+waitpid: No child processes
+waitpid: No child processes
+reading cmdline: could not fathom input
+reading bg: extra input ignoredCannot open output file
+: Bad address
+Cannot open output file
+: No such file or directory

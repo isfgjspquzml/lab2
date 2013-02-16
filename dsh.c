@@ -95,24 +95,16 @@ void spawn_job(job_t *j, bool fg)
         
     /* YOUR CODE HERE? */
     /* Builtin commands are already taken care earlier */
-        
-        printf("Switch Statement\n");
-        switch (pid = fork()) {
+            switch (pid = fork()) {
                 
             case -1: /* fork failure */
-                printf("FAIL\n");
                 perror("fork");
                 exit(EXIT_FAILURE);
                 
             case 0: /* child process  */
-                printf("Child Process\n");
                 p->pid = getpid();
                 new_child(j, p, fg);
-                
-                /* YOUR CODE HERE?  Child-side code for new process. */
-                if (j->pgid<0) j->pgid=getpid();
-                if (setpgid(0,j->pgid)==0 && fg) tcsetpgrp(STDIN_FILENO,j->pgid);
-                
+                                                
                 // input/output stuff
                 if(p->ifile!=NULL) {
                     fdinput = open(p->ifile, O_RDWR);
@@ -155,6 +147,13 @@ void spawn_job(job_t *j, bool fg)
                         printf("close\n");
                     }
                 }
+                    
+                if (j->pgid<0)
+                    j->pgid=getpid();
+                    p->pid = 0;
+                    
+                if (!setpgid(0,j->pgid) && fg) tcsetpgrp(STDIN_FILENO,j->pgid);
+
 
                 if(execvp(p->argv[0],p->argv)<0){
                     perror("exec failed")  ;           
