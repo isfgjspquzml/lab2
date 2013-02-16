@@ -277,6 +277,7 @@ waitpid: No child processes
 waitpid: No child processes
 waitpid: No child processes
 waitpid: No child processes
+<<<<<<< HEAD
 >>>>>>> 93e957b095a36e946312857fba22ee29e7579140
 exec failed: No such file or directory
 waitpid: No child processes
@@ -293,3 +294,12 @@ collect2: ld returned 1 exit status
 make: *** [dsh] Error 1
 exec failed: No such file or directory
 waitpid: No child processes
+=======
+waitpid: No child processes
+waitpid: No child processes
+reading cmdline: could not fathom input
+reading bg: extra input ignoredCannot open output file
+: Bad address
+Cannot open output file
+: No such file or directory
+>>>>>>> c2c49855a30c4b080ff6184f058d01f6f37696ed
