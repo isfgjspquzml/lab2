@@ -342,3 +342,25 @@ dsh.c: In function ‘main’:
 dsh.c:451:21: warning: implicit declaration of function ‘readprocessinfo’ [-Wimplicit-function-declaration]
 exec failed: No such file or directory
 waitpid: No child processes
+dsh.c: In function ‘main’:
+dsh.c:451:21: warning: implicit declaration of function ‘readprocessinfo’ [-Wimplicit-function-declaration]
+exec failed: No such file or directory
+waitpid: No child processes
+exec failed: No such file or directory
+waitpid: No child processes
+dsh.c: In function ‘cleanup’:
+dsh.c:271:13: warning: statement with no effect [-Wunused-value]
+dsh.c: In function ‘builtin_cmd’:
+dsh.c:313:26: warning: comparison with string literal results in unspecified behavior [-Waddress]
+dsh.c: In function ‘main’:
+dsh.c:458:21: warning: implicit declaration of function ‘readprocessinfo’ [-Wimplicit-function-declaration]
+exec failed: No such file or directory
+waitpid: No child processes
+dsh.c: In function ‘cleanup’:
+dsh.c:271:13: warning: statement with no effect [-Wunused-value]
+dsh.c: In function ‘builtin_cmd’:
+dsh.c:313:28: error: ‘COMPLETE’ undeclared (first use in this function)
+dsh.c:313:28: note: each undeclared identifier is reported only once for each function it appears in
+dsh.c: In function ‘main’:
+dsh.c:458:21: warning: implicit declaration of function ‘readprocessinfo’ [-Wimplicit-function-declaration]
+make: *** [dsh] Error 1

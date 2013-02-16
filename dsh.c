@@ -263,11 +263,16 @@ char* check_status( job_t* job){
 void cleanup(){
     job_t*cur=joblist;
     while(cur!=NULL){
-        if(job_is_completed(cur)){
+ 
+        if(job_is_completed(cur)&&cur->notified){
+            printf("hi\n");
+            
             delete_job(cur,joblist);
-        }else{
+            cur=joblist; 
+            }else{
             cur=cur->next;
-        }
+            printf("ASDFASDF\n");
+            }        
             
     }
 
@@ -305,7 +310,9 @@ bool builtin_cmd(job_t *last_job, int argc, char **argv)
 
                 
                 char * status = check_status(cur);
-                
+                if(status=="COMPLETED"){
+                    cur->notified=true;
+                }
                 printf("%u: %s %s \n",cur->pgid,status, cur->commandinfo);
             
                 
